@@ -16,7 +16,7 @@ public class Main {
 		ArrayList<Integer> order = new ArrayList<>();
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
-    // list의 메서드인 acc(index, value)를 이용해서 숫자를 입력 받을 때마다 해당 숫자만큼 앞으로 이동해 값 저장 
+    // list의 메서드인 add(index, value)를 이용해서 숫자를 입력 받을 때마다 해당 숫자만큼 앞으로 이동해 값 저장 
 		for (int i = 0; i < student; i++) {
 			int n = Integer.parseInt(st.nextToken());
 			order.add(i - n, i + 1);
