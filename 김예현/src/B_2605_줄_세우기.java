@@ -1,8 +1,6 @@
-package org.baekjoon.solution.mine;
-
 import java.util.Scanner;
 
-public class B_2605_줄세우기 {
+public class B_2605_줄_세우기 {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
