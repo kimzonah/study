@@ -1,9 +1,7 @@
-package org.baekjoon.solution.mine;
-
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class B_2309_일곱난쟁이 {
+public class B_2309_일곱_난쟁이 {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
