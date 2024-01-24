@@ -1,6 +1,8 @@
+package baekjoon;
+
 import java.util.Scanner;
 
-public class B_2669_직사각형_네개의_합집합의_면적_구하기 {
+public class BOJ_2669_직사각형_네개의_합집합의_면적_구하기 {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 
