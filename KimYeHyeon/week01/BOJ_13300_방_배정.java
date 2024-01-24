@@ -1,6 +1,8 @@
+package baekjoon;
+
 import java.util.Scanner;
 
-public class B_13300_방_배정 {
+public class BOJ_13300_방_배정 {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
