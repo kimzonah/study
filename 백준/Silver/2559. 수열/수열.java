@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main{
 
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,7 +12,8 @@ public class Main {
 		
 		int N = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
-		int sumArr = 0;
+		int sum = 0;
+		int max = -100000000;
 		//K 번
 		int[] arr = new int[N];
 		st = new StringTokenizer(br.readLine());
@@ -20,20 +21,20 @@ public class Main {
 		for(int i = 0; i < N; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		
-		int[] sum = new int[N-K+1]; 
-		
-		for(int i = 0; i < sum.length; i++) {
+		 
+		for(int i = 0; i < N-K+1; i++) {
 			for(int j = i; j < i + K; j++) {
-				sumArr += arr[j];
+				sum += arr[j];
 			}
-			sum[i] = sumArr;
-			sumArr = 0;
+			if(max < sum) {
+				max = sum;
+			}
+			sum = 0;
 		}
 		
-		Arrays.sort(sum);
+		System.out.println(max);
 		
-		System.out.println(sum[sum.length-1]);
+		
 	
 
 	}
