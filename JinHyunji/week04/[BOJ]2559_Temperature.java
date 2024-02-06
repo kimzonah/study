@@ -1,9 +1,11 @@
+package week04;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Temperature {
 
 	public static void main(String[] args) throws IOException {
 		// N, K 값 입력 받기
