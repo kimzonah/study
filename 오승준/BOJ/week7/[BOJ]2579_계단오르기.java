@@ -1,5 +1,3 @@
-//*****************************시간초과***********************
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -7,53 +5,49 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class Main {
-	// 계단 수 N 선언
+	// 계단의 개수 N 선언
 	static int N;
-	// 계단 점수 배열 선언, N+1로해서 보기 편하게
-	static int[] stair;
-	// 최댓값 max 생성
-	static int max = Integer.MIN_VALUE;
-
-	static BufferedReader br;
+	// 계단 별 점수 받을 배열 arr 선언
+	static int[] arr;
+	// 계단까지의 최대합을 기록하는 memoization 배열 선언
+	static int[] memoization;
+	// br, bw 선언
 	static BufferedWriter bw;
-
+	static BufferedReader br;
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		// N 입력 후 stair 배열 생성
+		// N 변수 입력
 		N = Integer.parseInt(br.readLine());
-		stair = new int[N + 1];
-		// N개의 계단에 데이터 입력
-		for (int i = 1; i <= N; i++) {
-			stair[i] = Integer.parseInt(br.readLine());
+		// arr,memo 생성(N+1로!)
+		arr = new int[N+1];
+		memoization = new int[N+1];
+		for(int i=1;i<=N;i++) {
+			arr[i] = Integer.parseInt(br.readLine());
 		}
-		// DSF 실행, 인자는 cnt 1이랑 1번(i값)
-		DFS(0, 1, 1);
-		// max값 출력
-		bw.write(max+"");
+		// memoization 배열에 처음값 입력
+		memoization[1] = arr[1];
+		if(N>=2) {
+			memoization[2] = arr[1]+arr[2];
+			if(N>=3) {
+				// DFS 실행
+				DFS();				
+			}
+		}
+		
+		// memoization의 마지막 값 출력
+		bw.write(memoization[N]+"");
 		bw.flush();
 		bw.close();
 	}
-
-	// DFS 함수 실행 -> DFS로 풀면 시간초과네 ㅠ
-	public static void DFS(int sum, int count, int number) {
-        if(count ==3){
-            return;
-        }
-		sum += stair[number];
-		if (max < sum) {
-			max = sum;
+	public static void DFS() {
+		//초기 memo값인 1,2를 통해 수행
+		for(int i=3;i<=N;i++) {
+			// memo i값은 i-2의 memo값과 더하는 방법과
+			// i-3에서의 momo값과 i-1의 arr을 더할 수 있다
+			memoization[i] = Math.max(memoization[i-2]+arr[i], memoization[i-3]+arr[i-1]+arr[i]);
 		}
-		
-		// i+1,i+2에 대한 반복 실행
-		for (int i = number + 1; i <= number + 2 && i <= N; i++) {
-			if (i != number + 1) {
-				// j가 i+1 이면 count++;
-				DFS(sum, 1, i);
-				// DFS 재귀 실행
-			} else {
-				DFS(sum, ++count, i);
-			}
-		}
+		// N까지 해당 DP를 완료
 	}
+	
 }
