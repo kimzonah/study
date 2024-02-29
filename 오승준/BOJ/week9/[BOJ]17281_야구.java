@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Stack;
 import java.util.StringTokenizer;
-
+// [BOJ]17281_야구40,60,78번줄 수정사항 update
 class Main {
 	static int N;
 	static int[][] arr;
@@ -19,7 +19,7 @@ class Main {
 	static StringTokenizer st;
 
 	public static void main(String[] args) throws IOException {
-		// 17281 야구 -> 시간초과, 수열로 받는게 아닌가? 받는거만 해도 1초가 지나가네
+		// 17281 야구
 		br = new BufferedReader(new InputStreamReader(System.in));
 		bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
@@ -37,71 +37,102 @@ class Main {
 		numbers = new int[10];
 		visited = new int[10];
 		// idx = 1인 타자가 4번에 고정
+		//(수정) 범규처럼 visited설정하고 넘겼어
+		// 수정) 수열 정하는 부분에서 if가 하나 더 생겨서 그런지 시간초과 발생
 		numbers[4] = 1;
+		visited[4] = 1;
 		// 2~9번 타자는 M과 N으로 순서 설정
-		selectNum(1);
-		
-		bw.write(max+"");
+		selectNum(2);
+
+		bw.write(max + "");
 		bw.flush();
 		bw.close();
 	}
 
 	static void selectNum(int count) {
 		if (count == 10) {
-			// count == 10이면(index 9까지의 순서가 완성되면)
-			// 선수들의 순서대로 게임을 시작
-			int a = game(numbers);
-			if(max<a) {
-				max = a;
-				
-			}
+			game();
 			return;
 		}
-		for (int i = 2; i < 10; i++) {
+		for (int i = 1; i < 10; i++) {
 			// numbers[4]는 이미 들어가 있으므로 skip
-			if (count == 4) {
-				selectNum(count + 1);
-			}
 			// count가 4가 아니라면 visited 보고 DFS 순회
-			else if (visited[i] != 1) {
+			// (수정) 여기서도 visited[4] 보고 넘어감, 시간초과 발생했어서
+			if (visited[i] != 1) {
 				visited[i] = 1;
-				numbers[count] = i;
+				numbers[i] = count;
 				selectNum(count + 1);
 				visited[i] = 0;
 			}
 		}
 	}
 
-	static int game(int[] number) {
-		Stack<Integer> q = new Stack<>();
-		// 점수는 queue로 받아볼끼? -> 시간 초과
-		// 반대를 stack으로 받음 ? -> 시간 초과
+	static void game() {
 		int score = 0;
 		int outcnt = 0;
-		// i(이닝수), j(순번)설정
-		int j = 0;
+		boolean[] mound = new boolean[3];
+
 		int i = 0;
-		while(i!=N) {
-			if(arr[i][number[(j%9)+1]]==0) {
+		int j = 1;
+		// (수정)범규처럼 상황별 케이스를 다 입력했으 ㅠ
+		// (수정)j는 따로 for문 없이 마지막에 더해주면서 10되면 초기화하는 식으로
+		while (i != N) {
+			if (arr[i][numbers[j]] == 0) {
 				outcnt++;
+			} else if (arr[i][numbers[j]] == 1) {
+				for (int k = 2; k >= 0; k--) {
+					if (mound[k]) {
+						if (k == 2) {
+							score++;
+							mound[k] = false;
+						} else {
+							mound[k] = false;
+							mound[k + 1] = true;
+						}
+					}
+				}
+				mound[0] = true;
+			} else if (arr[i][numbers[j]] == 2) {
+				for (int k = 2; k >= 0; k--) {
+					if (mound[k]) {
+						if (k == 2 || k == 1) {
+							score++;
+							mound[k] = false;
+						} else {
+							mound[k] = false;
+							mound[k + 2] = true;
+						}
+					}
+				}
+				mound[1] = true;
+			} else if (arr[i][numbers[j]] == 3) {
+				for (int k = 2; k >= 0; k--) {
+					if (mound[k]) {
+						score++;
+						mound[k] = false;
+					}
+				}
+				mound[2] = true;
 			} else {
+				for (int k = 2; k >= 0; k--) {
+					if (mound[k]) {
+						score++;
+						mound[k] = false;
+					}
+				}
 				score++;
 			}
-			if(outcnt==3) {
+			if (outcnt == 3) {
+				mound = new boolean[3];
 				i++;
 				outcnt = 0;
 			}
 			j++;
+			if (j == 10)
+				j = 1;
 		}
-		return score;
+		max = Math.max(max,score);
+
 	}
+
 }
-// 순서에 맞게 각 타자의 기록에 따라 점수를 기록한다
-// 현재 마운드의 상황을 기록하는 1차 배열 생성
-// 1 - 0번  배열에 1, 1이 있으면 다음 자리에 1 넘김
-// 2 - 1번 배열에 1, 0번에 1있었으면 3, 1,2번에 있었으면 비우고 점수 추가
-// 3 - 2번 배열에 1, 0,1,2,에 있었으면 비우고 점수 추가
-// 4 - 전부 비우고 1이 있던 만큼 점수 추가
-// 0 - 배열은 나두고 out 1추가, 아웃이 3이 되면 다음 이닝의 행을 불러온다
-// 주어진 이닝 * 3(아웃카운트)면 게임이 종료되니까 그만큼 반복하면서
-// 점수의 최댓값을 구해주면 되겠다
